@@ -53,6 +53,11 @@ int main()
     //		Wait for response
     memset(buf, 0, 4096);
     int bytesReceived = recv(sock, buf, 4096, 0);
+    string mensajeStart = string(buf, bytesReceived);
+    cout << mensajeStart.c_str() << endl;
+    if (mensajeStart == "Start"){
+        cout << "hola don juan" << endl;
+    }
     if (bytesReceived == -1)
     {
         cout << "There was an error getting response from server\r\n";
@@ -60,7 +65,7 @@ int main()
     else
     {
         //		Display response
-        cout << "SERVER> " << string(buf, bytesReceived) << "\r\n";
+        cout << "SERVER> " << string(buf, bytesReceived).c_str() << "\r\n";
     }
 
     while(true);
