@@ -7,8 +7,6 @@
 #include <string.h>
 #include <string>
 
-
-
 using namespace std;
 
 int main()
@@ -38,37 +36,37 @@ int main()
 
     //	While loop:
     char buf[4096];
+    string userInput;
 
 
-    //		Enter lines of text
-    string userInput = "hola dadu";
+    do {
+        //		Enter lines of text
+        cout << "> ";
+        getline(cin, userInput);
 
-    //		Send to server
-    int sendRes = send(sock, userInput.c_str(), userInput.size() + 1, 0);
-    if (sendRes == -1)
-    {
-        cout << "Could not send to server! Whoops!\r\n";
-    }
+        //		Send to server
+        int sendRes = send(sock, userInput.c_str(), userInput.size() + 1, 0);
+        if (sendRes == -1)
+        {
+            cout << "Could not send to server! Whoops!\r\n";
+            continue;
+        }
 
-    //		Wait for response
-    memset(buf, 0, 4096);
-    int bytesReceived = recv(sock, buf, 4096, 0);
-    string mensajeStart = string(buf, bytesReceived);
-    cout << mensajeStart.c_str() << endl;
-    if (mensajeStart == "Start"){
-        cout << "hola don juan" << endl;
-    }
-    if (bytesReceived == -1)
-    {
-        cout << "There was an error getting response from server\r\n";
-    }
-    else
-    {
-        //		Display response
-        cout << "SERVER> " << string(buf, bytesReceived).c_str() << "\r\n";
-    }
+        //		Wait for response
+        memset(buf, 0, 4096);
+        int bytesReceived = recv(sock, buf, 4096, 0);
+        if (bytesReceived == -1)
+        {
+            cout << "There was an error getting response from server\r\n";
+        }
 
-    while(true);
+        if ()
+        else
+        {
+            //		Display response
+            cout << string(buf, 0, bytesReceived) << "\r\n";
+        }
+    } while(true);
 
     //	Close the socket
     close(sock);
