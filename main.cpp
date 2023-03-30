@@ -6,11 +6,15 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <string>
+#include "Game.h"
 
 using namespace std;
 
+Game* game = nullptr;
+
 int main()
 {
+    game = new Game();
     //	Create a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
@@ -37,9 +41,12 @@ int main()
     //	While loop:
     char buf[4096];
     string userInput;
+    while(game is running)
 
 
     do {
+
+
         //		Enter lines of text
         cout << "> ";
         getline(cin, userInput);
@@ -60,7 +67,7 @@ int main()
             cout << "There was an error getting response from server\r\n";
         }
 
-        if ()
+
         else
         {
             //		Display response
