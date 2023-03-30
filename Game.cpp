@@ -54,7 +54,7 @@ void Game::update() {}
 void Game::render() {
     SDL_RenderClear(renderer);
     //aqui agregamos varas para el render
-    SDL_RenderPresent(renderer)
+    SDL_RenderPresent(renderer);
 }
 
 void Game::clean() {
@@ -63,3 +63,4 @@ void Game::clean() {
     SDL_Quit();
     cout << "Listo" << endl;
 }
+

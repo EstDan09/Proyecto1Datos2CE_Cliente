@@ -12,9 +12,12 @@ using namespace std;
 
 Game* game = nullptr;
 
-int main()
+int main(int argc, const char * argv[])
 {
     game = new Game();
+
+    game->init("LamentoEnElTibet", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+
     //	Create a socket
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
@@ -41,11 +44,11 @@ int main()
     //	While loop:
     char buf[4096];
     string userInput;
-    while(game is running)
-
 
     do {
-
+        game->handleEvents();
+        game->update();
+        game->render();
 
         //		Enter lines of text
         cout << "> ";
@@ -73,10 +76,9 @@ int main()
             //		Display response
             cout << string(buf, 0, bytesReceived) << "\r\n";
         }
-    } while(true);
-
-    //	Close the socket
+    } while(game->running());
     close(sock);
 
-    return 0;
+    game->clean();
+
 }
