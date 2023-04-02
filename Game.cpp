@@ -6,7 +6,7 @@
 #include <iostream>
 
 using namespace std;
-
+SDL_Texture* playerTEx;
 Game::Game() {}
 
 Game::~Game() {}
@@ -32,9 +32,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         }
         isRunning = true;
     }
-    else{
-
-    }
+    SDL_Surface* tmpSurface = IMG_Load("assets/ship.png");
 }
 
 void Game::handleEvents() {
