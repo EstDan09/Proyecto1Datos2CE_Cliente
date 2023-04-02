@@ -5,6 +5,7 @@
 #ifndef PROYECTO1DATOS2CE_CLIENTE_GAME_H
 #define PROYECTO1DATOS2CE_CLIENTE_GAME_H
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include <iostream>
 #include <sys/types.h>
 #include <unistd.h>
