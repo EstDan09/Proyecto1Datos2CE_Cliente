@@ -6,7 +6,7 @@ project(Proyecto1Datos2CE_Cliente)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Dependencies
-set(RAYLIB_VERSION 4.2.0)
+set(RAYLIB_VERSION 4.5.0)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     include(FetchContent)
@@ -25,7 +25,7 @@ endif()
 
 # Our Project
 
-add_executable(Proyecto1Datos2CE_Cliente main.cpp)
+add_executable(Proyecto1Datos2CE_Cliente main.cpp Entity.cpp Entity.h Background.cpp Background.h Player.cpp Player.h)
 #set(raylib_VERBOSE 1)
 target_link_libraries(Proyecto1Datos2CE_Cliente raylib)
 

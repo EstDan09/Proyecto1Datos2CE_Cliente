@@ -8,23 +8,33 @@
 #include <string>
 #include "raylib.h"
 #define NUM_FRAMES 1 //recorte
-
+#include "raymath.h"
 using namespace std;
+#include "Entity.h"
+#include "Background.h"
+#include "Player.h"
+#include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
+
+typedef enum GameScreen {MENU = 0, F1, F2, F3} GameScreen;
+
 
 
 int main(int argc, const char * argv[])
 {
     //Variables para la ventana
     //-----------------------------
-    const int screenWidth = 1920;
-    const int screenHeight = 1080;
+    const int screenWidth = 1500;
+    const int screenHeight = 1000;
     //------------------------------
 
 
     //Arrancamos la ventana
     //------------------------------
-    InitWindow(screenWidth, screenHeight, "Lamento en el Tibet");
+    raylib::Window window (screenWidth, screenHeight, "Lamento en el Tibet");
+    //InitWindow(screenWidth, screenHeight, "Lamento en el Tibet");
     //------------------------------
+
+    GameScreen currentScreen = MENU;
 
     //Audio
     //------------------------------
@@ -42,8 +52,18 @@ int main(int argc, const char * argv[])
     ImageResize(&settingsButtonImage, 100, 100);
     Texture2D settingsButton = LoadTextureFromImage(settingsButtonImage);
 
-    //Image backgroundMenuImage = LoadImage("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
-    Texture2D backgroundImage = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
+    Image shipImage = LoadImage("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/ship.png");
+    ImageResize(&shipImage, 100, 100);
+    raylib::Texture shipUsableImage = LoadTextureFromImage(shipImage);
+    Player player (&shipUsableImage, raylib::Rectangle(0,0, 100,100), raylib::Rectangle(0,0,100,100), 200.0f);
+
+    raylib::Texture backgroundImageMenu = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
+    Background backgroundMenu(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000), raylib::Rectangle(0,0,screenWidth, screenHeight),150.0f);
+
+    raylib::Texture backgroundImageF1 = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgF1.png");
+    Background backgroundF1(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000), raylib::Rectangle(0,0,screenWidth, screenHeight),150.0f);
+
+
     //------------------------------
 
     //Parametros del boton Start
@@ -64,9 +84,20 @@ int main(int argc, const char * argv[])
                             (float)settingsButton.width, frameHeightSettings};
     //------------------------------
 
+    //Parametros Nave Espacial
+    //------------------------------
+    float frameHeightShip = (float)shipUsableImage.height/NUM_FRAMES; //390
+    Rectangle sourceRecShip = {0,0, (float)shipUsableImage.width, frameHeightShip};
+
+    Rectangle shipBpunds = { screenWidth/10.0f - shipUsableImage.width/2.0f, screenHeight/8.0f - shipUsableImage.height/NUM_FRAMES/2.0f,
+                                      (float)shipUsableImage.width, frameHeightShip};
+
     //Variables que voy a usar
     int startButtonState = 0;
     bool startButtonAction = false;
+    int framesCounter = 0;
+
+    SetTargetFPS(60);
 
     Vector2 mousePoint = {0.0f, 0.0f};
 
@@ -104,54 +135,67 @@ int main(int argc, const char * argv[])
 
         //Update
         //-------------
-        mousePoint = GetMousePosition();
-        startButtonAction = false;
+        switch(currentScreen){
+            case MENU:{
 
+                mousePoint = GetMousePosition();
+                startButtonAction = false;
 
-        //-------------------------
-        if (CheckCollisionPointRec(mousePoint, startBottonBounds)) {
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-                startButtonState = 2 ;
+                if (CheckCollisionPointRec(mousePoint, startBottonBounds)) {
+                    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+                        startButtonState = 2 ;
+                    }
+                    else {
+                        startButtonState = 1;
+                    }
+                    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
+                        startButtonAction = true;
+                    }
+                }
+                else {
+                    startButtonState = 1;
+                }
+                if (startButtonAction) {
+                    string message = "Test Miedo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    if (sendRes == -1)
+                    {
+                        cout << "Could not send to server! Whoops!\r\n";
+                        continue;
+                    }
+                    PlaySound(fxButton);
+                    currentScreen = F1;
+                }
             }
-            else {
-                startButtonState = 1;
+            break;
+
+            case F1:{
+                player.Event();
             }
-            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)){
-                startButtonAction = true;
-            }
+            break;
+            default: break;
         }
-        else {
-            startButtonState = 1;
-        }
-        if (startButtonAction) {
-            string message = "Test Miedo";
-            int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
-            if (sendRes == -1)
-            {
-                cout << "Could not send to server! Whoops!\r\n";
-                continue;
-            }
-            PlaySound(fxButton);
-            CloseWindow();
-
-            InitWindow(screenWidth, screenHeight, "Lamento en el Tibet");
-            BeginDrawing();
-            //ClearBackground(WHITE);
-            DrawTexture(backgroundImage, 0,0, WHITE);
-            EndDrawing();
-        }
-
-        sourceRecStart.y = startButtonState* frameHeightStart;
-
-        //Draw
 
         BeginDrawing();
-
         ClearBackground(RAYWHITE);
-        DrawTexture(backgroundImage, 0,0, WHITE);
-        DrawTextureRec(startButton, sourceRecStart, (Vector2){ startBottonBounds.x, startBottonBounds.y }, WHITE); // Draw button frame
-        DrawTextureRec(settingsButton, sourceRecSettings, (Vector2){settingButtonBounds.x, settingButtonBounds.y}, WHITE);
 
+        switch(currentScreen){
+            case MENU:{
+                backgroundMenu.Update();
+                backgroundMenu.Draw();
+                DrawTextureRec(startButton, sourceRecStart, (Vector2){ startBottonBounds.x, startBottonBounds.y }, WHITE); // Draw button frame
+                DrawTextureRec(settingsButton, sourceRecSettings, (Vector2){settingButtonBounds.x, settingButtonBounds.y}, WHITE);
+            }
+            break;
+
+            case F1: {
+                backgroundF1.Update();
+                backgroundF1.Draw();
+                player.Draw();
+            }
+            break;
+            default: break;
+        }
         EndDrawing();
 
         //		Enter lines of text
