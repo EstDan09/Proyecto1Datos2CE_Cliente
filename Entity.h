@@ -8,6 +8,7 @@
 #include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
 
+
 class Entity {
 public:
     Entity(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip);

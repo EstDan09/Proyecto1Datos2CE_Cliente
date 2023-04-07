@@ -7,13 +7,22 @@
 
 
 #include "Entity.h"
+#include "Bullet.h"
 
 class Player : public Entity{
 public:
-    Player(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed);
+    Player(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
+           raylib::Texture* textureForBullets, float delay);
+    ~Player();
     void Event();
+    void Update();
+    void Draw();
 private:
     float speed;
+    Bullet* bullets;
+    int maxBullets;
+    float shootingTime;
+    float shootingDelay;
 };
 
 
