@@ -10,12 +10,18 @@
 #define NUM_FRAMES 1 //recorte
 #include "raymath.h"
 using namespace std;
-#include "Entity.h"
+
 #include "Background.h"
 #include "Player.h"
+#include "Bullet.h"
+#include "Enemy.h"
+
 #include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
+//Pantallas que voy a usar
+//------------------------------
 typedef enum GameScreen {MENU = 0, F1, F2, F3} GameScreen;
+//------------------------------
 
 
 
@@ -31,7 +37,6 @@ int main(int argc, const char * argv[])
     //Arrancamos la ventana
     //------------------------------
     raylib::Window window (screenWidth, screenHeight, "Lamento en el Tibet");
-    //InitWindow(screenWidth, screenHeight, "Lamento en el Tibet");
     //------------------------------
 
     GameScreen currentScreen = MENU;
@@ -52,19 +57,47 @@ int main(int argc, const char * argv[])
     ImageResize(&settingsButtonImage, 100, 100);
     Texture2D settingsButton = LoadTextureFromImage(settingsButtonImage);
 
-    Image shipImage = LoadImage("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/ship.png");
-    ImageResize(&shipImage, 100, 100);
+    Image shipImage = LoadImage("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/ships.png");
     raylib::Texture shipUsableImage = LoadTextureFromImage(shipImage);
-    Player player (&shipUsableImage, raylib::Rectangle(0,0, 100,100), raylib::Rectangle(0,0,100,100), 200.0f);
 
-    raylib::Texture backgroundImageMenu = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
-    Background backgroundMenu(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000), raylib::Rectangle(0,0,screenWidth, screenHeight),150.0f);
+    Image bulletImage = LoadImage("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/blasts.png");
+    raylib::Texture bulletUsableImage = LoadTextureFromImage(bulletImage);
 
     raylib::Texture backgroundImageF1 = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgF1.png");
-    Background backgroundF1(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000), raylib::Rectangle(0,0,screenWidth, screenHeight),150.0f);
 
-
+    raylib::Texture backgroundImageMenu = LoadTexture("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
     //------------------------------
+
+    //Objetos
+    //------------------------------
+    Player player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
+                   raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
+                   &bulletUsableImage, 0.25f);
+
+    Enemy enemyF1T1(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
+                &bulletUsableImage);
+
+    Enemy enemyF1T2(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                 raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
+                 &bulletUsableImage);
+    Enemy enemyF1T3(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                    raylib::Rectangle(GetScreenWidth()-70, 790, 64,64), 200.0f,
+                    &bulletUsableImage);
+    Enemy enemyF1T4(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                    raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                    &bulletUsableImage);
+
+
+
+    Background backgroundMenu(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000),
+                              raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
+
+
+    Background backgroundF1(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000),
+                            raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
+    //------------------------------
+
 
     //Parametros del boton Start
     //------------------------------
@@ -84,15 +117,9 @@ int main(int argc, const char * argv[])
                             (float)settingsButton.width, frameHeightSettings};
     //------------------------------
 
-    //Parametros Nave Espacial
-    //------------------------------
-    float frameHeightShip = (float)shipUsableImage.height/NUM_FRAMES; //390
-    Rectangle sourceRecShip = {0,0, (float)shipUsableImage.width, frameHeightShip};
-
-    Rectangle shipBpunds = { screenWidth/10.0f - shipUsableImage.width/2.0f, screenHeight/8.0f - shipUsableImage.height/NUM_FRAMES/2.0f,
-                                      (float)shipUsableImage.width, frameHeightShip};
 
     //Variables que voy a usar
+    //------------------------------
     int startButtonState = 0;
     bool startButtonAction = false;
     int framesCounter = 0;
@@ -103,14 +130,17 @@ int main(int argc, const char * argv[])
 
     SetTargetFPS(60);
 
-    //	Create a socket
+    //	Creo el socket
+    //------------------------------
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
         return 1;
     }
+    //------------------------------
 
-    //	Create a hint structure for the server we're connecting with
+    //	Info sobre el server al que me quiero conectar
+    //------------------------------
     int port = 54000;
     string ipAddress = "127.0.0.1";
 
@@ -118,19 +148,23 @@ int main(int argc, const char * argv[])
     hint.sin_family = AF_INET;
     hint.sin_port = htons(port);
     inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
+    //------------------------------
 
-    //	Connect to the server on the socket
+    //	Conectar al server
+    //------------------------------
     int connectRes = connect(sock, (sockaddr*)&hint, sizeof(hint));
     if (connectRes == -1)
     {
         return 1;
     }
 
-    //	While loop:
     char buf[4096];
     string userInput;
+    //------------------------------
+
 
     //Main loop del juego y cliente
+    //------------------------------
     while(!WindowShouldClose()) {
 
         //Update
@@ -163,7 +197,7 @@ int main(int argc, const char * argv[])
                         cout << "Could not send to server! Whoops!\r\n";
                         continue;
                     }
-                    PlaySound(fxButton);
+                    //PlaySound(fxButton);
                     currentScreen = F1;
                 }
             }
@@ -171,6 +205,12 @@ int main(int argc, const char * argv[])
 
             case F1:{
                 player.Event();
+                backgroundMenu.Update();
+                player.Update();
+                enemyF1T1.Update();
+                enemyF1T2.Update();
+                enemyF1T3.Update();
+                enemyF1T4.Update();
             }
             break;
             default: break;
@@ -181,7 +221,6 @@ int main(int argc, const char * argv[])
 
         switch(currentScreen){
             case MENU:{
-                backgroundMenu.Update();
                 backgroundMenu.Draw();
                 DrawTextureRec(startButton, sourceRecStart, (Vector2){ startBottonBounds.x, startBottonBounds.y }, WHITE); // Draw button frame
                 DrawTextureRec(settingsButton, sourceRecSettings, (Vector2){settingButtonBounds.x, settingButtonBounds.y}, WHITE);
@@ -192,6 +231,10 @@ int main(int argc, const char * argv[])
                 backgroundF1.Update();
                 backgroundF1.Draw();
                 player.Draw();
+                enemyF1T1.Draw();
+                enemyF1T2.Draw();
+                enemyF1T3.Draw();
+                enemyF1T4.Draw();
             }
             break;
             default: break;

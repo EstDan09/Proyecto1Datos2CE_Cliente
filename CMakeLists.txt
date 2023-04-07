@@ -25,7 +25,7 @@ endif()
 
 # Our Project
 
-add_executable(Proyecto1Datos2CE_Cliente main.cpp Entity.cpp Entity.h Background.cpp Background.h Player.cpp Player.h)
+add_executable(Proyecto1Datos2CE_Cliente main.cpp Entity.cpp Entity.h Background.cpp Background.h Player.cpp Player.h Bullet.cpp Bullet.h Enemy.cpp Enemy.h Declarations.h)
 #set(raylib_VERBOSE 1)
 target_link_libraries(Proyecto1Datos2CE_Cliente raylib)
 

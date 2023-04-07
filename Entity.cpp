@@ -11,13 +11,17 @@ Entity::Entity(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Recta
 }
 
 void Entity::Event() {
-    //Nothing
+    //nothing
 }
 
 void Entity::Update() {
-    //Nothing
+    //nothing
 }
+
 
 void Entity::Draw() {
     texture->Draw(inClip, outClip);
 }
+
+
+
