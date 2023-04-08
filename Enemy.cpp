@@ -5,11 +5,12 @@
 #include "Enemy.h"
 
 Enemy::Enemy(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
-               raylib::Texture* textureForBullet)
-        : Entity(texture, inClip, outClip), speed(speed), shootingTime(0.0f){
+               raylib::Texture* textureForBullet, bool stop)
+        : Entity(texture, inClip, outClip), speed(speed), shootingTime(0.0f), stop(stop){
     bullet = new Bullet(textureForBullet, raylib::Rectangle(56,40, 8,-8),
                    outClip, speed*(-4.0f), 0);
     shootingTime = 0;
+    outClipB = bullet->getOutClip();
 }
 
 Enemy::~Enemy(){
@@ -22,6 +23,7 @@ void Enemy::Update() {
 
         if(bullet->IsHit()){
             bullet->Reset(outClip);
+            outClipB = bullet->getOutClip();
             shootingTime = 5.0f; //cadencia
         }
 
@@ -33,11 +35,16 @@ void Enemy::Update() {
 
     if(!bullet->IsHit()){
         bullet->Update();
+        outClipB = bullet->getOutClip();
+
     }
-    outClip.x -= 1;
-    if (outClip.x < 0){
-        //stop
+    if (!stop){
+        outClip.x -= 1;
+        if (outClip.x < 0){
+            //stop
+        }
     }
+
 
 
 }
@@ -48,4 +55,16 @@ void Enemy::Draw() {
         bullet->Draw();
     }
     texture->Draw(inClip, outClip);
+}
+
+raylib::Rectangle Enemy::getOutclip() {
+    return outClip;
+}
+
+void Enemy::setOutClip() {
+    outClip = raylib::Rectangle(5000,GetScreenHeight()/2,64,64);
+}
+
+raylib::Rectangle Enemy::getOutclipB() {
+    return outClipB;
 }

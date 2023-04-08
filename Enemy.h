@@ -11,14 +11,20 @@
 class Enemy : public Entity{
 public:
     Enemy(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
-            raylib::Texture* textureForBullet);
+            raylib::Texture* textureForBullet, bool stop);
     ~Enemy();
     void Update();
     void Draw();
+    raylib::Rectangle getOutclip();
+    raylib::Rectangle getOutclipB();
+    void setOutClip();
 private:
     float speed;
     Bullet* bullet;
     float shootingTime;
+    bool stop;
+    raylib::Rectangle outClipB;
+
 };
 
 

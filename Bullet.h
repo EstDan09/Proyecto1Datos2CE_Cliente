@@ -13,6 +13,8 @@ public:
     void Update();
     bool IsHit();
     void Reset(raylib::Rectangle outClip);
+    void setHit();
+    raylib::Rectangle getOutClip();
 
 private:
     float speed;

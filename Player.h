@@ -17,12 +17,22 @@ public:
     void Event();
     void Update();
     void Draw();
+    raylib::Rectangle getOutClip();
+    raylib::Rectangle getOutClipB1();
+    raylib::Rectangle getOutClipB2();
+    raylib::Rectangle getOutClipB3();
+    raylib::Rectangle getOutClipB4();
+    void setOutClip();
 private:
     float speed;
     Bullet* bullets;
     int maxBullets;
     float shootingTime;
     float shootingDelay;
+    raylib::Rectangle outClipB1;
+    raylib::Rectangle outClipB2;
+    raylib::Rectangle outClipB3;
+    raylib::Rectangle outClipB4;
 };
 
 

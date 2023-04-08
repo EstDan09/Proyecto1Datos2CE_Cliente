@@ -27,3 +27,10 @@ void Bullet::Reset(raylib::Rectangle outClip) {
     this->outClip = outClip;
     hit = false;
 }
+void Bullet::setHit() {
+    hit = true;
+}
+
+raylib::Rectangle Bullet::getOutClip() {
+    return outClip;
+}

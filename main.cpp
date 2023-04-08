@@ -18,10 +18,14 @@ using namespace std;
 
 #include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
+int lives = 1;
+int fase1Con = 0;
+
 //Pantallas que voy a usar
 //------------------------------
 typedef enum GameScreen {MENU = 0, F1, F2, F3} GameScreen;
 //------------------------------
+
 
 
 
@@ -70,31 +74,30 @@ int main(int argc, const char * argv[])
 
     //Objetos
     //------------------------------
-    Player player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
+    auto* player = new Player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
                    raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
                    &bulletUsableImage, 0.25f);
 
-    Enemy enemyF1T1(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemyF1T1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                 raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
-                &bulletUsableImage);
+                &bulletUsableImage, false);
 
-    Enemy enemyF1T2(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemyF1T2 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                  raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
-                 &bulletUsableImage);
-    Enemy enemyF1T3(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                 &bulletUsableImage, false);
+
+    auto* enemyF1T3 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                     raylib::Rectangle(GetScreenWidth()-70, 790, 64,64), 200.0f,
-                    &bulletUsableImage);
-    Enemy enemyF1T4(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+                    &bulletUsableImage, false);
+
+    auto* enemyF1T4 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                     raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
-                    &bulletUsableImage);
+                    &bulletUsableImage, false);
 
-
-
-    Background backgroundMenu(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000),
+    auto* backgroundMenu = new Background(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000),
                               raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
 
-
-    Background backgroundF1(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000),
+    auto* backgroundF1 = new Background(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000),
                             raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
     //------------------------------
 
@@ -199,18 +202,108 @@ int main(int argc, const char * argv[])
                     }
                     //PlaySound(fxButton);
                     currentScreen = F1;
+                    lives = 2;
                 }
             }
             break;
 
             case F1:{
-                player.Event();
-                backgroundMenu.Update();
-                player.Update();
-                enemyF1T1.Update();
-                enemyF1T2.Update();
-                enemyF1T3.Update();
-                enemyF1T4.Update();
+                player->Event();
+                backgroundMenu->Update();
+                player->Update();
+                enemyF1T1->Update();
+                enemyF1T2->Update();
+                enemyF1T3->Update();
+                enemyF1T4->Update();
+                player->getOutClipB1();
+
+                if (lives <= 0){
+                    currentScreen = MENU;
+                }
+
+                //Colisiones
+                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclip())){
+                    player->setOutClip();
+                    lives --;
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
+                    enemyF1T1->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T2->getOutclip())){
+                    enemyF1T2->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T3->getOutclip())){
+                    enemyF1T3->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
+                    enemyF1T4->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T1->getOutclip())){
+                    enemyF1T1->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T2->getOutclip())){
+                    enemyF1T2->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T3->getOutclip())){
+                    enemyF1T3->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T4->getOutclip())){
+                    enemyF1T4->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T1->getOutclip())){
+                    enemyF1T1->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T2->getOutclip())){
+                    enemyF1T2->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T3->getOutclip())){
+                    enemyF1T3->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T4->getOutclip())){
+                    enemyF1T4->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T1->getOutclip())){
+                    enemyF1T1->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T2->getOutclip())){
+                    enemyF1T2->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T3->getOutclip())){
+                    enemyF1T3->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T4->getOutclip())){
+                    enemyF1T4->setOutClip();
+                }
+
+                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclipB())){
+                    player->setOutClip();
+                    lives --;
+                    sleep(2);
+                }
+
+
             }
             break;
             default: break;
@@ -221,20 +314,20 @@ int main(int argc, const char * argv[])
 
         switch(currentScreen){
             case MENU:{
-                backgroundMenu.Draw();
+                backgroundMenu->Draw();
                 DrawTextureRec(startButton, sourceRecStart, (Vector2){ startBottonBounds.x, startBottonBounds.y }, WHITE); // Draw button frame
                 DrawTextureRec(settingsButton, sourceRecSettings, (Vector2){settingButtonBounds.x, settingButtonBounds.y}, WHITE);
             }
             break;
 
             case F1: {
-                backgroundF1.Update();
-                backgroundF1.Draw();
-                player.Draw();
-                enemyF1T1.Draw();
-                enemyF1T2.Draw();
-                enemyF1T3.Draw();
-                enemyF1T4.Draw();
+                backgroundF1->Update();
+                backgroundF1->Draw();
+                player->Draw();
+                enemyF1T1->Draw();
+                enemyF1T2->Draw();
+                enemyF1T3->Draw();
+                enemyF1T4->Draw();
             }
             break;
             default: break;
