@@ -5,7 +5,7 @@
 #ifndef PROYECTO1DATOS2CE_CLIENTE_ENTITY_H
 #define PROYECTO1DATOS2CE_CLIENTE_ENTITY_H
 
-#include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
+#include "/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
 
 
