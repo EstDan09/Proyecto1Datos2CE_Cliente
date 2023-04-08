@@ -8,7 +8,7 @@ using namespace std;
 
 Player::Player(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
                raylib::Texture* textureForBullets, float delay)
-: Entity(texture, inClip, outClip), speed(speed), shootingTime(0), shootingDelay(delay){
+: Entity(texture, inClip, outClip), speed(speed), shootingTime(0), shootingDelay(delay), alive(true){
     maxBullets = 4;
     bullets = new Bullet[4]{
         Bullet(textureForBullets, raylib::Rectangle(64,56, 8,8),
@@ -24,6 +24,7 @@ Player::Player(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Recta
     outClipB2 = bullets[1].getOutClip();
     outClipB3 = bullets[2].getOutClip();
     outClipB4 = bullets[3].getOutClip();
+
 
 
 }
@@ -53,7 +54,7 @@ void Player::Event() {
         inClip.y= 8;
     }
 
-    if(shootingTime <= 0 && IsKeyPressed(KEY_SPACE)){
+    if(shootingTime <= 0){
         for (int i = 0; i < maxBullets; i++){
             if(bullets[i].IsHit()){
                 bullets[i].Reset(outClip);
@@ -62,6 +63,7 @@ void Player::Event() {
                 outClipB3 = bullets[2].getOutClip();
                 outClipB4 = bullets[3].getOutClip();
                 shootingTime = shootingDelay;
+
                 break;
             }
         }
@@ -120,3 +122,18 @@ raylib::Rectangle Player::getOutClipB4() {
     //cout << outClip.y << endl;
     return outClipB4;
 }
+
+void Player::setAlive() {
+    if (alive){
+        alive = false;
+    }
+    else{
+        alive = true;
+    }
+
+}
+
+void Player::setShootingDelay(float x){
+    shootingDelay = x;
+};
+

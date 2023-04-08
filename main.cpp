@@ -16,7 +16,7 @@ using namespace std;
 #include "Bullet.h"
 #include "Enemy.h"
 
-#include "/home/esteban/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
+#include "/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
 int lives = 1;
 int fase1Con = 0;
@@ -75,21 +75,21 @@ int main(int argc, const char * argv[])
     //------------------------------
     auto* player = new Player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
                    raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
-                   &bulletUsableImage, 0.25f);
+                   &bulletUsableImage, 3.0f);
 
-    auto* enemyF1T1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemy1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                 raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
                 &bulletUsableImage, false);
 
-    auto* enemyF1T2 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemy2 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                  raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
                  &bulletUsableImage, false);
 
-    auto* enemyF1T3 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemy3 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                     raylib::Rectangle(GetScreenWidth()-70, 790, 64,64), 200.0f,
                     &bulletUsableImage, false);
 
-    auto* enemyF1T4 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
+    auto* enemy4 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                     raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
                     &bulletUsableImage, false);
 
@@ -192,7 +192,7 @@ int main(int argc, const char * argv[])
                     startButtonState = 1;
                 }
                 if (startButtonAction) {
-                    string message = "Test Miedo";
+                    string message = "StartGame";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     if (sendRes == -1)
                     {
@@ -202,6 +202,7 @@ int main(int argc, const char * argv[])
                     //PlaySound(fxButton);
                     currentScreen = F1;
                     lives = 2;
+
                 }
             }
             break;
@@ -210,10 +211,10 @@ int main(int argc, const char * argv[])
                 player->Event();
                 backgroundMenu->Update();
                 player->Update();
-                enemyF1T1->Update();
-                enemyF1T2->Update();
-                enemyF1T3->Update();
-                enemyF1T4->Update();
+                enemy1->Update();
+                enemy2->Update();
+                enemy3->Update();
+                enemy4->Update();
                 player->getOutClipB1();
 
                 if (lives <= 0){
@@ -221,82 +222,83 @@ int main(int argc, const char * argv[])
                 }
 
                 //Colisiones
-                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclip())){
+                if (CheckCollisionRecs(player->getOutClip(), enemy1->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy2->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy3->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy4->getOutclip())){
                     player->setOutClip();
-                    lives --;
+                    string message = "C";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy1->getOutclip())){
+                    enemy1->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy2->getOutclip())){
+                    enemy2->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy3->getOutclip())){
+                    enemy3->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
-                    enemyF1T4->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy4->getOutclip())){
+                    enemy4->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy1->getOutclip())){
+                    enemy1->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy2->getOutclip())){
+                    enemy2->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy3->getOutclip())){
+                    enemy3->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy4->getOutclip())){
+                    enemy4->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy1->getOutclip())){
+                    enemy1->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy2->getOutclip())){
+                    enemy2->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy3->getOutclip())){
+                    enemy3->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy4->getOutclip())){
+                    enemy4->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy1->getOutclip())){
+                    enemy1->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy2->getOutclip())){
+                    enemy2->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy3->getOutclip())){
+                    enemy3->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy4->getOutclip())){
+                    enemy4->setOutClip();
                 }
 
-                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclipB())){
+                if (CheckCollisionRecs(player->getOutClip(), enemy1->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy2->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy3->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy4->getOutclipB())){
                     player->setOutClip();
                     lives --;
                     sleep(2);
@@ -323,10 +325,10 @@ int main(int argc, const char * argv[])
                 backgroundF1->Update();
                 backgroundF1->Draw();
                 player->Draw();
-                enemyF1T1->Draw();
-                enemyF1T2->Draw();
-                enemyF1T3->Draw();
-                enemyF1T4->Draw();
+                enemy1->Draw();
+                enemy2->Draw();
+                enemy3->Draw();
+                enemy4->Draw();
             }
             break;
             default: break;

@@ -23,7 +23,11 @@ public:
     raylib::Rectangle getOutClipB3();
     raylib::Rectangle getOutClipB4();
     void setOutClip();
+    void setAlive();
+    bool getAlive();
+    void setShootingDelay(float x);
 private:
+    bool alive;
     float speed;
     Bullet* bullets;
     int maxBullets;

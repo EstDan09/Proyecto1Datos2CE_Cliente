@@ -62,7 +62,7 @@ raylib::Rectangle Enemy::getOutclip() {
 }
 
 void Enemy::setOutClip() {
-    outClip = raylib::Rectangle(5000,GetScreenHeight()/2,64,64);
+    outClip = raylib::Rectangle(5000,2000,64,64);
 }
 
 raylib::Rectangle Enemy::getOutclipB() {
