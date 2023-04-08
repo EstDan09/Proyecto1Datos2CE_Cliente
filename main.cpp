@@ -28,7 +28,6 @@ typedef enum GameScreen {MENU = 0, F1, F2, F3} GameScreen;
 
 
 
-
 int main(int argc, const char * argv[])
 {
     //Variables para la ventana
