@@ -99,8 +99,8 @@ raylib::Rectangle Player::getOutClip() {
     return outClip;
 }
 
-void Player::setOutClip() {
-     outClip = raylib::Rectangle(100,GetScreenHeight()/2,64,64);
+void Player::setOutClip(raylib::Rectangle outClipNew) {
+     outClip = outClipNew;
 }
 
 raylib::Rectangle Player::getOutClipB1() {

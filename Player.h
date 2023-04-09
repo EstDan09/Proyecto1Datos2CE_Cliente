@@ -22,7 +22,7 @@ public:
     raylib::Rectangle getOutClipB2();
     raylib::Rectangle getOutClipB3();
     raylib::Rectangle getOutClipB4();
-    void setOutClip();
+    void setOutClip(raylib::Rectangle outClipNew);
     void setAlive();
     bool getAlive();
     void setShootingDelay(float x);

@@ -61,8 +61,8 @@ raylib::Rectangle Enemy::getOutclip() {
     return outClip;
 }
 
-void Enemy::setOutClip() {
-    outClip = raylib::Rectangle(5000,2000,64,64);
+void Enemy::setOutClip(raylib::Rectangle outClipNew) {
+    outClip = outClipNew;
 }
 
 raylib::Rectangle Enemy::getOutclipB() {
