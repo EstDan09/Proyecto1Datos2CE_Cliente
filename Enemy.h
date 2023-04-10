@@ -17,7 +17,7 @@ public:
     void Draw();
     raylib::Rectangle getOutclip();
     raylib::Rectangle getOutclipB();
-    void setOutClip();
+    void setOutClip(raylib::Rectangle outClipNew);
 private:
     float speed;
     Bullet* bullet;

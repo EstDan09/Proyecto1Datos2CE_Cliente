@@ -99,41 +99,43 @@ raylib::Rectangle Player::getOutClip() {
     return outClip;
 }
 
-void Player::setOutClip() {
-     outClip = raylib::Rectangle(100,GetScreenHeight()/2,64,64);
+void Player::setOutClip(raylib::Rectangle outClipNew) {
+     outClip = outClipNew;
+}
+
+void Player::setOutClipB1(raylib::Rectangle outClipNew) {
+    bullets[0].setOutClip(outClipNew);
+}
+
+void Player::setOutClipB2(raylib::Rectangle outClipNew) {
+    bullets[1].setOutClip(outClipNew);
+}
+
+void Player::setOutClipB3(raylib::Rectangle outClipNew) {
+    bullets[2].setOutClip(outClipNew);
+}
+
+void Player::setOutClipB4(raylib::Rectangle outClipNew) {
+    bullets[3].setOutClip(outClipNew);
 }
 
 raylib::Rectangle Player::getOutClipB1() {
-    cout << outClipB1.x << endl;
     return outClipB1;
 }
 
 raylib::Rectangle Player::getOutClipB2() {
-    //cout << outClip.y << endl;
     return outClipB2;
 }
 
 raylib::Rectangle Player::getOutClipB3() {
-    //cout << outClip.y << endl;
     return outClipB3;
 }
 
 raylib::Rectangle Player::getOutClipB4() {
-    //cout << outClip.y << endl;
     return outClipB4;
 }
 
-void Player::setAlive() {
-    if (alive){
-        alive = false;
-    }
-    else{
-        alive = true;
-    }
-
-}
-
-void Player::setShootingDelay(float x){
+void Player::setDelay(float x) {
     shootingDelay = x;
-};
+}
 

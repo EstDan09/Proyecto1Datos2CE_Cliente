@@ -34,3 +34,7 @@ void Bullet::setHit() {
 raylib::Rectangle Bullet::getOutClip() {
     return outClip;
 }
+
+void Bullet::setOutClip(raylib::Rectangle outClipNew) {
+    outClip = outClipNew;
+}

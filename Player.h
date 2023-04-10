@@ -10,6 +10,7 @@
 #include "Bullet.h"
 
 class Player : public Entity{
+
 public:
     Player(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
            raylib::Texture* textureForBullets, float delay);
@@ -22,10 +23,13 @@ public:
     raylib::Rectangle getOutClipB2();
     raylib::Rectangle getOutClipB3();
     raylib::Rectangle getOutClipB4();
-    void setOutClip();
-    void setAlive();
-    bool getAlive();
-    void setShootingDelay(float x);
+    void setOutClip(raylib::Rectangle outClipNew);
+    void setOutClipB1(raylib::Rectangle outClipNew);
+    void setOutClipB2(raylib::Rectangle outClipNew);
+    void setOutClipB3(raylib::Rectangle outClipNew);
+    void setOutClipB4(raylib::Rectangle outClipNew);
+    void setDelay(float x);
+
 private:
     bool alive;
     float speed;
