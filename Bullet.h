@@ -15,6 +15,8 @@ public:
     void Reset(raylib::Rectangle outClip);
     void setHit();
     raylib::Rectangle getOutClip();
+    void setOutClip(raylib::Rectangle outClipNew);
+
 
 private:
     float speed;

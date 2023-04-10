@@ -20,6 +20,7 @@ using namespace std;
 
 int lives = 1;
 int fase1Con = 0;
+int bulletsLeft = 300;
 
 //Pantallas que voy a usar
 //------------------------------
@@ -80,19 +81,19 @@ int main(int argc, const char * argv[])
                    &bulletUsableImage, 3.0f);
 
     auto* enemy1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
+                raylib::Rectangle(GetScreenWidth()-70, 200, 64,64), 200.0f,
                 &bulletUsableImage, false);
 
     auto* enemy2 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                 raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
+                 raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
                  &bulletUsableImage, false);
 
     auto* enemy3 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                    raylib::Rectangle(GetScreenWidth()-70, 790, 64,64), 200.0f,
+                    raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
                     &bulletUsableImage, false);
 
     auto* enemy4 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                    raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                    raylib::Rectangle(GetScreenWidth()-70,900, 64,64), 200.0f,
                     &bulletUsableImage, false);
 
     auto* enemy5 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
@@ -213,7 +214,7 @@ int main(int argc, const char * argv[])
                     startButtonState = 1;
                 }
                 if (startButtonAction) {
-                    string message = "S1";
+                    string message = "S";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     if (sendRes == -1)
                     {
@@ -242,6 +243,38 @@ int main(int argc, const char * argv[])
                 }
 
                 //Colisiones
+                if (player->getOutClipB1().x > 1470 && player->getOutClipB1().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB2().x > 1470 && player->getOutClipB2().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB3().x > 1470 && player->getOutClipB3().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB4().x > 1470 && player->getOutClipB4().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+                }
+
                 if (CheckCollisionRecs(player->getOutClip(), enemy1->getOutclip())
                 || CheckCollisionRecs(player->getOutClip(), enemy2->getOutclip())
                 || CheckCollisionRecs(player->getOutClip(), enemy3->getOutclip())
@@ -260,8 +293,12 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB1(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A1";
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+                    string message = "A01";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -289,8 +326,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB1(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A2";
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -303,8 +343,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB1(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A3";
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -313,12 +356,12 @@ int main(int argc, const char * argv[])
                     if (recibido == "destruida"){
                         enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
-                        string message = "B";
+                        string message = "E";
                         int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                         int bytesReceived = recv(sock, buf, 4096, 0);
                         string recibido = string(buf, 0, bytesReceived);
-                        if (recibido == "nextF"){
+                        if (recibido == "true"){
 
                             enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
                             enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
@@ -331,8 +374,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB1(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A4";
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -360,8 +406,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB2(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A1";
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -389,8 +438,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB2(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A2";
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -417,8 +469,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB2(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A3";
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -446,8 +501,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB2(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A4";
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -474,8 +532,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB3(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A1";
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -503,8 +564,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB3(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A2";
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -531,8 +595,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB3(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A3";
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -560,8 +627,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB3(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A4";
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -588,8 +658,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB4(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A1";
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -617,8 +690,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB4(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A2";
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -645,8 +721,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB4(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A3";
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -674,8 +753,11 @@ int main(int argc, const char * argv[])
                 }
 
                 if (CheckCollisionRecs(player->getOutClipB4(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
 
-                    string message = "A4";
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
                     int bytesReceived = recv(sock, buf, 4096, 0);
@@ -722,6 +804,18 @@ int main(int argc, const char * argv[])
                     }
                 }
 
+                string message = "W";
+                int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                int bytesReceived = recv(sock, buf, 4096, 0);
+                string recibido = string(buf, 0, bytesReceived);
+                if (recibido == "false"){
+                    player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                    lives --;
+                    sleep(1);
+                }
+
+
 
             }
             break;
@@ -759,6 +853,10 @@ int main(int argc, const char * argv[])
                 enemy2->Draw();
                 enemy3->Draw();
                 enemy4->Draw();
+                string firstText = "Bullets: ";
+                string secondtext = to_string(bulletsLeft);
+                string bulletCounter = firstText + secondtext;
+                DrawText(bulletCounter.c_str(), 0,0,30, GREEN);
             }
             break;
 
