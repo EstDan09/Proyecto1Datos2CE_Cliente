@@ -18,9 +18,10 @@ using namespace std;
 
 #include "/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
-int lives = 1;
+int lives = 10;
 int fase1Con = 0;
 int bulletsLeft = 300;
+int bulletsCLeft = 0;
 
 //Pantallas que voy a usar
 //------------------------------
@@ -78,7 +79,7 @@ int main(int argc, const char * argv[])
     //------------------------------
     auto* player = new Player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
                    raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
-                   &bulletUsableImage, 3.0f);
+                   &bulletUsableImage, 1.0f);
 
     auto* enemy1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
                 raylib::Rectangle(GetScreenWidth()-70, 200, 64,64), 200.0f,
@@ -269,7 +270,6 @@ int main(int argc, const char * argv[])
 
                 if (player->getOutClipB4().x > 1470 && player->getOutClipB4().y < 1000){
                     bulletsLeft -= 1;
-                    cout << "mando al server: fallo" << endl;
                     string message = "fallo";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
@@ -304,7 +304,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -336,7 +336,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
                     }
 
@@ -353,7 +353,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "E";
@@ -384,7 +384,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -416,7 +416,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -448,7 +448,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -479,7 +479,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -511,7 +511,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -542,7 +542,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -574,7 +574,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -605,7 +605,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -637,7 +637,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -668,7 +668,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -700,7 +700,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -731,7 +731,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -763,7 +763,7 @@ int main(int argc, const char * argv[])
                     int bytesReceived = recv(sock, buf, 4096, 0);
                     string recibido = string(buf, 0, bytesReceived);
 
-                    if (recibido == "destruida"){
+                    if (recibido == "destruido"){
                         enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
 
                         string message = "B";
@@ -853,10 +853,14 @@ int main(int argc, const char * argv[])
                 enemy2->Draw();
                 enemy3->Draw();
                 enemy4->Draw();
-                string firstText = "Bullets: ";
-                string secondtext = to_string(bulletsLeft);
-                string bulletCounter = firstText + secondtext;
+                string firstTextB = "Bullets: ";
+                string secondtextB = to_string(bulletsLeft);
+                string bulletCounter = firstTextB + secondtextB;
                 DrawText(bulletCounter.c_str(), 0,0,30, GREEN);
+                string firstTextBC = "Bulletin the Kollector: ";
+                string secondtextBC = to_string(bulletsCLeft);
+                string bulletCCounter = firstTextBC + secondtextBC;
+                DrawText(bulletCCounter.c_str(), 300,0,30, GREEN);
             }
             break;
 

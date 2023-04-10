@@ -120,7 +120,6 @@ void Player::setOutClipB4(raylib::Rectangle outClipNew) {
 }
 
 raylib::Rectangle Player::getOutClipB1() {
-    cout << "1: " << outClipB1.x << endl;
     return outClipB1;
 }
 
