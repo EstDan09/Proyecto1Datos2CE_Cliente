@@ -5,7 +5,10 @@
 #include "Bullet.h"
 
 Bullet::Bullet(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed, int type)
-: Entity(texture, inClip, outClip), speed(speed), hit(true), type(type){}
+: Entity(texture, inClip, outClip), speed(speed), hit(true), type(type){
+    Bullet::recycled = false;
+    Bullet::next = nullptr;
+}
 
 void Bullet::Update() {
     if (type == 0){
@@ -37,4 +40,17 @@ raylib::Rectangle Bullet::getOutClip() {
 
 void Bullet::setOutClip(raylib::Rectangle outClipNew) {
     outClip = outClipNew;
+}
+
+bool Bullet::getRecycled() const {
+    return recycled;
+}
+Bullet* Bullet::getNextPtr() const {
+    return next;
+}
+void Bullet::setRecycled(bool nCondition) {
+    Bullet::recycled = nCondition;
+}
+void Bullet::setNextPtr(Bullet *next) {
+    Bullet::next = next;
 }

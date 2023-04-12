@@ -16,12 +16,17 @@ public:
     void setHit();
     raylib::Rectangle getOutClip();
     void setOutClip(raylib::Rectangle outClipNew);
-
+    bool getRecycled() const;
+    Bullet* getNextPtr() const;
+    void setNextPtr(Bullet* next);
+    void setRecycled(bool nCondition);
+    Bullet* next;
 
 private:
     float speed;
     bool hit;
     int type;
+    bool recycled;
 };
 
 

@@ -2,13 +2,14 @@
 // Created by esteban on 4/5/23.
 //
 
-#include "Player.h"
+#include "ShipPlayer.h"
 #include "iostream"
 using namespace std;
 
-Player::Player(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
-               raylib::Texture* textureForBullets, float delay)
+ShipPlayer::ShipPlayer(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed,
+                       raylib::Texture* textureForBullets, float delay, int sVida)
 : Entity(texture, inClip, outClip), speed(speed), shootingTime(0), shootingDelay(delay), alive(true){
+    ShipPlayer::vida = sVida;
     maxBullets = 4;
     bullets = new Bullet[4]{
         Bullet(textureForBullets, raylib::Rectangle(64,56, 8,8),
@@ -24,16 +25,12 @@ Player::Player(raylib::Texture *texture, raylib::Rectangle inClip, raylib::Recta
     outClipB2 = bullets[1].getOutClip();
     outClipB3 = bullets[2].getOutClip();
     outClipB4 = bullets[3].getOutClip();
-
-
-
 }
-
-Player::~Player(){
+ShipPlayer::~ShipPlayer(){
     delete[] bullets;
 }
 
-void Player::Event() {
+void ShipPlayer::Event() {
     if(IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
         inClip.y = 0;
         outClip.x += GetFrameTime() * speed;
@@ -73,7 +70,7 @@ void Player::Event() {
     }
 }
 
-void Player::Update() {
+void ShipPlayer::Update() {
     for (int i = 0; i < maxBullets; i++){
         if(!bullets[i].IsHit()){
             bullets[i].Update();
@@ -86,7 +83,7 @@ void Player::Update() {
     }
 }
 
-void Player::Draw() {
+void ShipPlayer::Draw() {
     for (int i = 0; i < maxBullets; i++){
         if(!bullets[i].IsHit()){
             bullets[i].Draw();
@@ -95,47 +92,66 @@ void Player::Draw() {
     texture->Draw(inClip, outClip);
 }
 
-raylib::Rectangle Player::getOutClip() {
+raylib::Rectangle ShipPlayer::getOutClip() {
     return outClip;
 }
 
-void Player::setOutClip(raylib::Rectangle outClipNew) {
+void ShipPlayer::setOutClip(raylib::Rectangle outClipNew) {
      outClip = outClipNew;
 }
 
-void Player::setOutClipB1(raylib::Rectangle outClipNew) {
+void ShipPlayer::setOutClipB1(raylib::Rectangle outClipNew) {
     bullets[0].setOutClip(outClipNew);
 }
 
-void Player::setOutClipB2(raylib::Rectangle outClipNew) {
+void ShipPlayer::setOutClipB2(raylib::Rectangle outClipNew) {
     bullets[1].setOutClip(outClipNew);
 }
 
-void Player::setOutClipB3(raylib::Rectangle outClipNew) {
+void ShipPlayer::setOutClipB3(raylib::Rectangle outClipNew) {
     bullets[2].setOutClip(outClipNew);
 }
 
-void Player::setOutClipB4(raylib::Rectangle outClipNew) {
+void ShipPlayer::setOutClipB4(raylib::Rectangle outClipNew) {
     bullets[3].setOutClip(outClipNew);
 }
 
-raylib::Rectangle Player::getOutClipB1() {
+raylib::Rectangle ShipPlayer::getOutClipB1() {
     return outClipB1;
 }
 
-raylib::Rectangle Player::getOutClipB2() {
+raylib::Rectangle ShipPlayer::getOutClipB2() {
     return outClipB2;
 }
 
-raylib::Rectangle Player::getOutClipB3() {
+raylib::Rectangle ShipPlayer::getOutClipB3() {
     return outClipB3;
 }
 
-raylib::Rectangle Player::getOutClipB4() {
+raylib::Rectangle ShipPlayer::getOutClipB4() {
     return outClipB4;
 }
 
-void Player::setDelay(float x) {
+void ShipPlayer::setDelay(float x) {
     shootingDelay = x;
+}
+
+int ShipPlayer::getVida() const {
+    return vida;
+}
+
+void ShipPlayer::setVida(int cVida) {
+    ShipPlayer::vida = cVida;
+}
+
+bool ShipPlayer::isAlive(){
+    if(vida<=0){
+        return false;
+    }
+    return true;
+}
+
+void ShipPlayer::setAlive(bool cAlive) {
+    ShipPlayer::alive = cAlive;
 }
 

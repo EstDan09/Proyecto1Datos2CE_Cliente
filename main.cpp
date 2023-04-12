@@ -12,14 +12,16 @@
 using namespace std;
 
 #include "Background.h"
-#include "Player.h"
+#include "ShipPlayer.h"
 #include "Bullet.h"
-#include "Enemy.h"
+#include "ShipEnemy.h"
 
 #include "/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/raylib-cpp-4.5.0/include/raylib-cpp.hpp"
 
-int lives = 1;
+int lives = 10;
 int fase1Con = 0;
+int bulletsLeft = 300;
+int bulletsCLeft = 0;
 
 //Pantallas que voy a usar
 //------------------------------
@@ -47,7 +49,7 @@ int main(int argc, const char * argv[])
     //Audio
     //------------------------------
     InitAudioDevice();
-    Sound fxButton = LoadSound("/home/esteban/CLionProjects/Proyecto1Datos2CE_Cliente/assets/one.wav");
+    Sound fxButton = LoadSound("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/one.wav");
     //------------------------------
 
     //Imagenes
@@ -63,41 +65,62 @@ int main(int argc, const char * argv[])
     Image shipImage = LoadImage("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/ships.png");
     raylib::Texture shipUsableImage = LoadTextureFromImage(shipImage);
 
-    Image bulletImage = LoadImage("/home/dadu/Documents/GitHub//Proyecto1Datos2CE_Cliente/assets/blasts.png");
+    Image bulletImage = LoadImage("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/blasts.png");
     raylib::Texture bulletUsableImage = LoadTextureFromImage(bulletImage);
 
-    raylib::Texture backgroundImageF1 = LoadTexture("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/bgF1.png");
+    raylib::Texture backgroundImageF1 = LoadTexture("/home/dadu/Documents/GitHub/CLionProjects/Proyecto1Datos2CE_Cliente/assets/bgF1.png");
+
+    raylib::Texture backgroundImageF2 = LoadTexture("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/bgF2.png");
 
     raylib::Texture backgroundImageMenu = LoadTexture("/home/dadu/Documents/GitHub/Proyecto1Datos2CE_Cliente/assets/bgMenu.png");
     //------------------------------
 
     //Objetos
     //------------------------------
-    auto* player = new Player (&shipUsableImage, raylib::Rectangle(40,8, 8,8),
-                   raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
-                   &bulletUsableImage, 0.25f);
+    auto* player = new ShipPlayer (&shipUsableImage, raylib::Rectangle(40, 8, 8, 8),
+                                   raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
+                                   &bulletUsableImage, 1.0f);
 
-    auto* enemyF1T1 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
-                &bulletUsableImage, false);
+    auto* enemy1 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70, 200, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
 
-    auto* enemyF1T2 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                 raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
-                 &bulletUsableImage, false);
+    auto* enemy2 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
 
-    auto* enemyF1T3 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                    raylib::Rectangle(GetScreenWidth()-70, 790, 64,64), 200.0f,
-                    &bulletUsableImage, false);
+    auto* enemy3 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70, 700, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
 
-    auto* enemyF1T4 = new Enemy(&shipUsableImage, raylib::Rectangle(40,48,8,8),
-                    raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
-                    &bulletUsableImage, false);
+    auto* enemy4 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70,900, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
+
+    auto* enemy5 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
+
+    auto* enemy6 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
+
+    auto* enemy7 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
+
+    auto* enemy8 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
+                                 raylib::Rectangle(GetScreenWidth()-70,550, 64,64), 200.0f,
+                                 &bulletUsableImage, false);
 
     auto* backgroundMenu = new Background(&backgroundImageMenu,raylib::Rectangle(200,100,1300, 1000),
                               raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
 
     auto* backgroundF1 = new Background(&backgroundImageF1,raylib::Rectangle(200,100,1300, 1000),
                             raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
+
+    auto* backgroundF2 = new Background(&backgroundImageF2,raylib::Rectangle(200,100,1300, 1000),
+                                        raylib::Rectangle(0,0,screenWidth, screenHeight),0.0f);
     //------------------------------
 
 
@@ -192,7 +215,7 @@ int main(int argc, const char * argv[])
                     startButtonState = 1;
                 }
                 if (startButtonAction) {
-                    string message = "Test Miedo";
+                    string message = "S";
                     int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     if (sendRes == -1)
                     {
@@ -202,18 +225,18 @@ int main(int argc, const char * argv[])
                     //PlaySound(fxButton);
                     currentScreen = F1;
                     lives = 2;
+
                 }
             }
             break;
 
             case F1:{
                 player->Event();
-                backgroundMenu->Update();
                 player->Update();
-                enemyF1T1->Update();
-                enemyF1T2->Update();
-                enemyF1T3->Update();
-                enemyF1T4->Update();
+                enemy1->Update();
+                enemy2->Update();
+                enemy3->Update();
+                enemy4->Update();
                 player->getOutClipB1();
 
                 if (lives <= 0){
@@ -221,87 +244,590 @@ int main(int argc, const char * argv[])
                 }
 
                 //Colisiones
-                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclip())
-                || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclip())){
-                    player->setOutClip();
+                if (player->getOutClipB1().x > 1470 && player->getOutClipB1().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB2().x > 1470 && player->getOutClipB2().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB3().x > 1470 && player->getOutClipB3().y < 1000){
+                    bulletsLeft -= 1;
+                    cout << "mando al server: fallo" << endl;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (player->getOutClipB4().x > 1470 && player->getOutClipB4().y < 1000){
+                    bulletsLeft -= 1;
+                    string message = "fallo";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+                }
+
+                if (CheckCollisionRecs(player->getOutClip(), enemy1->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy2->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy3->getOutclip())
+                || CheckCollisionRecs(player->getOutClip(), enemy4->getOutclip())){
+
+                    string message = "C";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "false"){
+                        player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                        lives --;
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+                    string message = "A01";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "E";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "true"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB1(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB2(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB3(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy1->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A01";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy2->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A02";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy2->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy3->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A03";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy3->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+
+                }
+
+                if (CheckCollisionRecs(player->getOutClipB4(), enemy4->getOutclip())){
+                    bulletsLeft -= 1;
+
+                    player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
+
+                    string message = "A04";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+
+                    if (recibido == "destruido"){
+                        enemy4->setOutClip(raylib::Rectangle(5000,2000,64,64));
+
+                        string message = "B";
+                        int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                        int bytesReceived = recv(sock, buf, 4096, 0);
+                        string recibido = string(buf, 0, bytesReceived);
+                        if (recibido == "nextF"){
+
+                            enemy1->setOutClip(raylib::Rectangle(GetScreenWidth()-70, GetScreenHeight()/2, 64,64));
+                            enemy2->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 700, 64,64));
+                            enemy3->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 790, 64,64));
+                            enemy4->setOutClip(raylib::Rectangle(GetScreenWidth()-70, 200, 64,64));
+                            player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                            currentScreen = F2;
+                        }
+                    }
+                }
+
+                if (CheckCollisionRecs(player->getOutClip(), enemy1->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy2->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy3->getOutclipB())
+                    || CheckCollisionRecs(player->getOutClip(), enemy4->getOutclipB())){
+
+                    string message = "C";
+                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                    int bytesReceived = recv(sock, buf, 4096, 0);
+                    string recibido = string(buf, 0, bytesReceived);
+                    if (recibido == "false"){
+                        player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                        lives --;
+                        sleep(1);
+                    }
+                    else{
+                        player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                        sleep(1);
+                    }
+                }
+
+                string message = "W";
+                int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+
+                int bytesReceived = recv(sock, buf, 4096, 0);
+                string recibido = string(buf, 0, bytesReceived);
+                if (recibido == "false"){
+                    player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
                     lives --;
+                    sleep(1);
                 }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
-                }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
-                }
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
-                }
+            }
+            break;
 
-                if (CheckCollisionRecs(player->getOutClipB1(), enemyF1T1->getOutclip())){
-                    enemyF1T4->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB2(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB3(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T1->getOutclip())){
-                    enemyF1T1->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T2->getOutclip())){
-                    enemyF1T2->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T3->getOutclip())){
-                    enemyF1T3->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClipB4(), enemyF1T4->getOutclip())){
-                    enemyF1T4->setOutClip();
-                }
-
-                if (CheckCollisionRecs(player->getOutClip(), enemyF1T1->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T2->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T3->getOutclipB())
-                    || CheckCollisionRecs(player->getOutClip(), enemyF1T4->getOutclipB())){
-                    player->setOutClip();
-                    lives --;
-                    sleep(2);
-                }
-
+            case F2:{
+                player->Event();
+                player->Update();
+                enemy1->Update();
+                enemy2->Update();
+                enemy3->Update();
+                enemy4->Update();
+                player->getOutClipB1();
 
             }
             break;
@@ -323,12 +849,33 @@ int main(int argc, const char * argv[])
                 backgroundF1->Update();
                 backgroundF1->Draw();
                 player->Draw();
-                enemyF1T1->Draw();
-                enemyF1T2->Draw();
-                enemyF1T3->Draw();
-                enemyF1T4->Draw();
+                enemy1->Draw();
+                enemy2->Draw();
+                enemy3->Draw();
+                enemy4->Draw();
+                string firstTextB = "Bullets: ";
+                string secondtextB = to_string(bulletsLeft);
+                string bulletCounter = firstTextB + secondtextB;
+                DrawText(bulletCounter.c_str(), 0,0,30, GREEN);
+                string firstTextBC = "Bulletin the Kollector: ";
+                string secondtextBC = to_string(bulletsCLeft);
+                string bulletCCounter = firstTextBC + secondtextBC;
+                DrawText(bulletCCounter.c_str(), 300,0,30, GREEN);
             }
             break;
+
+            case F2: {
+                backgroundF2->Update();
+                backgroundF2->Draw();
+                player->Draw();
+                //player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
+                enemy1->Draw();
+                //enemy1->setOutClip(raylib::Rectangle(5000,2000,64,64));
+                enemy2->Draw();
+                enemy3->Draw();
+                enemy4->Draw();
+            }
+                break;
             default: break;
         }
         EndDrawing();
