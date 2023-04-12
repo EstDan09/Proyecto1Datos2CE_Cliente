@@ -10,6 +10,7 @@
 class Bullet : public Entity {
 public:
     Bullet(raylib::Texture* texture, raylib::Rectangle inClip, raylib::Rectangle outClip, float speed, int type);
+    ~Bullet();
     void Update();
     bool IsHit();
     void Reset(raylib::Rectangle outClip);

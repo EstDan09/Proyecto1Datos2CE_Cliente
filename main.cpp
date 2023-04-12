@@ -77,9 +77,10 @@ int main(int argc, const char * argv[])
 
     //Objetos
     //------------------------------
+
     auto* player = new ShipPlayer (&shipUsableImage, raylib::Rectangle(40, 8, 8, 8),
                                    raylib::Rectangle(100,GetScreenHeight()/2,64,64), 200.0f,
-                                   &bulletUsableImage, 1.0f);
+                                   &bulletUsableImage, 1.0f,100);
 
     auto* enemy1 = new ShipEnemy(&shipUsableImage, raylib::Rectangle(40, 48, 8, 8),
                                  raylib::Rectangle(GetScreenWidth()-70, 200, 64,64), 200.0f,
@@ -247,31 +248,31 @@ int main(int argc, const char * argv[])
                 if (player->getOutClipB1().x > 1470 && player->getOutClipB1().y < 1000){
                     bulletsLeft -= 1;
                     cout << "mando al server: fallo" << endl;
-                    string message = "fallo";
-                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    //string message = "fallo";
+                    //int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     player->setOutClipB1(raylib::Rectangle(0,1100, 32,32));
                 }
 
                 if (player->getOutClipB2().x > 1470 && player->getOutClipB2().y < 1000){
                     bulletsLeft -= 1;
                     cout << "mando al server: fallo" << endl;
-                    string message = "fallo";
-                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    //string message = "fallo";
+                    //int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     player->setOutClipB2(raylib::Rectangle(0,1100, 32,32));
                 }
 
                 if (player->getOutClipB3().x > 1470 && player->getOutClipB3().y < 1000){
                     bulletsLeft -= 1;
                     cout << "mando al server: fallo" << endl;
-                    string message = "fallo";
-                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    //string message = "fallo";
+                    //int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     player->setOutClipB3(raylib::Rectangle(0,1100, 32,32));
                 }
 
                 if (player->getOutClipB4().x > 1470 && player->getOutClipB4().y < 1000){
                     bulletsLeft -= 1;
-                    string message = "fallo";
-                    int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
+                    //string message = "fallo";
+                    //int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
                     player->setOutClipB4(raylib::Rectangle(0,1100, 32,32));
                 }
 
@@ -804,16 +805,7 @@ int main(int argc, const char * argv[])
                     }
                 }
 
-                string message = "W";
-                int sendRes = send(sock, message.c_str(), message.size() + 1, 0);
 
-                int bytesReceived = recv(sock, buf, 4096, 0);
-                string recibido = string(buf, 0, bytesReceived);
-                if (recibido == "false"){
-                    player->setOutClip(raylib::Rectangle(100,GetScreenHeight()/2,64,64));
-                    lives --;
-                    sleep(1);
-                }
 
 
 
